@@ -1,7 +1,19 @@
-const RADIO_NAME = 'Jailson Webradio';
+/*
+The MIT License (MIT) 
+PARAN JARE RIKO
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+const RADIO_NAME = 'Bintang Tenggara FM';
 
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
-const URL_STREAMING = 'https://stream.zeno.fm/2p5tpsaurfhvv';
+const URL_STREAMING = 'https://stream.zeno.fm/kc67gypcxghtv';
 
 // You can find the mount point in the Broadcast Settings.
 // To generate the Zeno Radio API link from the mount point,
@@ -9,7 +21,7 @@ const URL_STREAMING = 'https://stream.zeno.fm/2p5tpsaurfhvv';
 // For example, if the mount point is 'yn65fsaurfhvv/source',
 // the API link will be 'https://api.zeno.fm/mounts/metadata/subscribe/yn65fsaurfhvv'.
 
-const url = 'https://api.zeno.fm/mounts/metadata/subscribe/yn65fsaurfhvv';
+const url = 'https://api.zeno.fm/mounts/metadata/subscribe/kc67gypcxghtv';
 
 // Variable to control history display: true = display / false = hides
 let showHistory = true; 
@@ -25,15 +37,15 @@ window.onload = function () {
     var player = new Player();
     player.play();
 
-    // Os dados da música tocando agora chegam via SSE (connectToEventSource),
-    // não por polling. A altura da capa é responsabilidade do CSS (aspect-ratio).
+    // The music data currently being played arrives via SSE (connectToEventSource).
+    // not via polling. The height of the cover is the responsibility of the CSS (aspect-ratio).
 
     localStorage.removeItem('musicHistory');
 }
 
-// Cache de letras: guarda a própria Promise (não só o resultado) para que
-// duas chamadas quase simultâneas para a mesma música (SSE + polling)
-// reaproveitem a mesma requisição em vez de martelar as APIs de novo.
+// Letter cache: stores the Promise itself (not just the result) so that
+// two nearly simultaneous calls for the same song (SSE + polling)
+// Reuse the same request instead of hammering the APIs again.
 var lyricsCache = {};
 
 function fetchLyrics(currentArtist, currentSong) {
@@ -43,8 +55,8 @@ function fetchLyrics(currentArtist, currentSong) {
     }
 
     var promise = (async function () {
-        // A API do Vagalume foi descontinuada — busca em lyrics.ovh e,
-        // se não encontrar, no LRCLIB (nenhuma exige chave de API).
+        // The Vagalume API has been discontinued — search on lyrics.ovh and,
+        // if you don't find it, on LRCLIB (none require an API key).
         var lyric = null;
         try {
             var response = await fetch('https://api.lyrics.ovh/v1/' + encodeURIComponent(currentArtist) + '/' + encodeURIComponent(currentSong));
@@ -110,9 +122,9 @@ class Page {
             }
         };
 
-        // Função para atualizar a capa
+        // Function to update the cover image
         this.refreshCover = function (song = '', artist) {
-            // Criação da tag de script para fazer a requisição JSONP à API do Deezer
+            // Creating the script tag to make the JSONP request to the Deezer API
             const script = document.createElement('script');
             script.src = `https://api.deezer.com/search?q=${encodeURIComponent(artist + ' ' + song)}&output=jsonp&callback=handleDeezerResponse`;
             document.body.appendChild(script);
@@ -156,7 +168,7 @@ class Page {
     }
 }
 
-// Variável global para armazenar as músicas
+// Global variable to store the songs
 var audio = new Audio(URL_STREAMING);
 
 // Player control
@@ -165,8 +177,8 @@ class Player {
         this.play = function () {
             var playPromise = audio.play();
             if (playPromise !== undefined) {
-                // Autoplay bloqueado pelo navegador até a primeira interação:
-                // não é um erro, o usuário dá o play manualmente.
+                // Autoplay blocked by the browser until the first interaction:
+                // It's not an error; the user starts playback manually.
                 playPromise.catch(function () {});
             }
 
@@ -199,7 +211,7 @@ function setPlayerIcon(iconClass, label) {
 
 // On play, change the button to pause
 audio.onplay = function () {
-    setPlayerIcon('fa fa-pause', 'PAUSAR');
+    setPlayerIcon('fa fa-pause', 'PAUSE');
 }
 
 // On pause, change the button to play (a menos que estejamos exibindo o
@@ -220,7 +232,7 @@ audio.addEventListener('playing', function () {
     isIntentionalPause = false;
     reconnectAttempts = 0;
     if (reconnectTimeout) clearTimeout(reconnectTimeout);
-    setPlayerIcon('fa fa-pause', 'PAUSAR');
+    setPlayerIcon('fa fa-pause', 'PAUSE');
 });
 
 // Unmute when volume changed
@@ -230,10 +242,10 @@ audio.onvolumechange = function () {
     }
 }
 
-// Reconexão automática (rede instável) antes de incomodar o usuário com o
-// confirm() de "Stream Down" — só aparece se 5 tentativas seguidas falharem.
-// Começa true: antes da primeira reprodução real não há o que reconectar
-// (ex.: stream fora do ar no carregamento não deve gerar loop nem confirm).
+// Automatic reconnection (unstable network) before bothering the user with the
+// "Stream Down" confirm() — only appears if 5 consecutive attempts fail.
+// It starts as *true*: before the first actual playback, there is nothing to reconnect.
+// (e.g., a stream going offline while loading should not trigger a loop or a confirmation prompt).
 let isIntentionalPause = true;
 let reconnectAttempts = 0;
 let reconnectTimeout = null;
@@ -269,7 +281,7 @@ function handleConnectionDrop() {
 audio.onerror = handleConnectionDrop;
 audio.addEventListener('stalled', handleConnectionDrop);
 
-// Fade suave no volume ao dar play/pause, para evitar o "estalo" de áudio
+// Smooth volume fade when playing/pausing to avoid audio "popping."
 let fadeInterval = null;
 
 function fadeOut(callback) {
@@ -363,74 +375,74 @@ function mute() {
     }
 }
 
-// Função para lidar com a conexão de eventos
+// Function to handle event connections
 function connectToEventSource(url) {
-    // Criar uma nova instância de EventSource com a URL fornecida
+    // Create a new EventSource instance with the provided URL.
     const eventSource = new EventSource(url);
 
-    // Adicionar um ouvinte para o evento 'message'
+    // Add a listener for the 'message' event
     eventSource.addEventListener('message', function(event) {
-        // Chamar a função para tratar os dados recebidos, passando a URL também
+        // Call the function to process the received data, passing the URL as well.
         processData(event.data, url);
     });
 
-    // Adicionar um ouvinte para o evento 'error'
+    // Add a listener for the 'error' event
     eventSource.addEventListener('error', function(event) {
         console.error('Erro na conexão de eventos:', event);
-        // Tentar reconectar após um intervalo de tempo
+        // Try to reconnect after a period of time
         setTimeout(function() {
             connectToEventSource(url);
         }, 1000);
     });
 }
 
-// Função para tratar os dados recebidos
+// Function to process the received data
 function processData(data) {
     // Parse JSON
     const parsedData = JSON.parse(data);
     
-    // Verificar se a mensagem é sobre a música
+    // Check if the message is about the song.
     if (parsedData.streamTitle) {
-        // Extrair o título da música e o artista
+        // Extract the song title and the artist
         let artist, song;
         const streamTitle = parsedData.streamTitle;
 
         if (streamTitle.includes('-')) {
             [artist, song] = streamTitle.split(' - ');
         } else {
-            // Se não houver "-" na string, consideramos que o título é apenas o nome da música
+            // If there is no "-" in the string, we consider the title to be just the song name.
             artist = '';
             song = streamTitle;
         }
 
-        // Criar o objeto com os dados formatados
+        // Create the object with the formatted data.
         const formattedData = {
             currentSong: song.trim(),
             currentArtist: artist.trim()
         };
 
-        // Converter o objeto em JSON
+        // Convert the object to JSON
         const jsonData = JSON.stringify(formattedData);
 
-        // Chamar a função getStreamingData com os dados formatados e a URL
+        // Call the getStreamingData function with the formatted data and the URL.
         getStreamingData(jsonData);
     } else {
         console.log('Mensagem recebida:', parsedData);
     }
 }
 
-// Iniciar a conexão com a API
+// Initiate the connection to the API
 connectToEventSource(url);
 
-// Define a função de manipulação da resposta da API do Deezer no escopo global.
-// O JSONP só passa `data` — título/artista atuais vêm do DOM.
+// Defines the Deezer API response handling function in the global scope.
+// JSONP only passes `data` — the current title/artist come from the DOM.
 function handleDeezerResponse(data) {
     var coverArt = document.getElementById('currentCoverArt');
     var coverBackground = document.getElementById('bgCover');
 
     var hasResult = data && data.data && data.data.length > 0;
-    // Buscar o Cover pelo nome da música (artist.picture_big buscaria pelo artista)
-    var artworkUrl = hasResult ? data.data[0].album.cover_big : 'img/cover.png';
+    // Search for the cover art by song title (artist.picture_big would search by artist)
+    var artworkUrl = hasResult ? data.data[0].album.cover_big : 'https://live.staticflickr.com/65535/53459011184_1df18fcc82_b.jpg';
 
     coverArt.style.backgroundImage = 'url(' + artworkUrl + ')';
     coverArt.className = 'animated bounceInLeft';
@@ -464,11 +476,11 @@ function getStreamingData(data) {
 
     var page = new Page();
 
-    // Formatar caracteres para UTF-8
+    // Format characters as UTF-8
     let song = jsonData.currentSong.replace(/&apos;/g, '\'').replace(/&amp;/g, '&');
     let artist = jsonData.currentArtist.replace(/&apos;/g, '\'').replace(/&amp;/g, '&');
 
-    // Mudar o título
+    // Change the title
     document.title = song + ' - ' + artist + ' | ' + RADIO_NAME;
 
     page.refreshCover(song, artist);
@@ -477,13 +489,13 @@ function getStreamingData(data) {
 
     if (showHistory) {
 
-        // Verificar se a música é diferente da última atualizada
+        // Check if the song is different from the last updated one.
         if (musicHistory.length === 0 || (musicHistory[0].song !== song)) {
-            // Atualizar o histórico com a nova música
+            // Update the history with the new song
             updateMusicHistory(artist, song);
         }
 
-        // Atualizar a interface do histórico
+        // Update the history interface
         updateHistoryUI();
 
     }
@@ -498,20 +510,20 @@ function updateHistoryUI() {
     }
 }
 
-// Variável global para armazenar o histórico das duas últimas músicas
+// Global variable to store the history of the last two songs
 var musicHistory = [];
 
-// Função para atualizar o histórico das duas últimas músicas
+// Function to update the history of the last two songs
 function updateMusicHistory(artist, song) {
     // Adicionar a nova música no início do histórico
     musicHistory.unshift({ artist: artist, song: song });
 
-    // Manter apenas as duas últimas músicas no histórico
+    // Keep only the last two songs in the history
     if (musicHistory.length > 4) {
         musicHistory.pop(); // Remove a música mais antiga do histórico
     }
 
-    // Chamar a função para exibir o histórico atualizado
+    // Call the function to display the updated history.
     displayHistory();
 }
 
@@ -521,12 +533,12 @@ function displayHistory() {
     var $songName = document.querySelectorAll('#historicSong article .music-info .song');
     var $artistName = document.querySelectorAll('#historicSong article .music-info .artist');
 
-    // Exibir as duas últimas músicas no histórico, começando do índice 1 para excluir a música atual
+    // Display the last two songs in the history, starting from index 1 to exclude the current song
     for (var i = 1; i < musicHistory.length && i < 3; i++) {
         $songName[i - 1].innerHTML = musicHistory[i].song;
         $artistName[i - 1].innerHTML = musicHistory[i].artist;
 
-        // Chamar a função para buscar a capa da música na API do Deezer
+        // Call the function to fetch the song cover art from the Deezer API.
         refreshCoverForHistory(musicHistory[i].song, musicHistory[i].artist, i - 1);
 
         // Adicionar classe para animação
@@ -543,14 +555,14 @@ function displayHistory() {
     }, 2000);
 }
 
-// Função para atualizar a capa da música no histórico
+// Function to update the song cover in the history
 function refreshCoverForHistory(song, artist, index) {
     // Criação da tag de script para fazer a requisição JSONP à API do Deezer
     const script = document.createElement('script');
     script.src = `https://api.deezer.com/search?q=${encodeURIComponent(artist)} ${encodeURIComponent(song)}&output=jsonp&callback=handleDeezerResponseForHistory_${index}`;
     document.body.appendChild(script);
 
-    // Função de manipulação da resposta da API do Deezer para o histórico de músicas
+    // Function to handle the Deezer API response for the song history.
     window['handleDeezerResponseForHistory_' + index] = function (data) {
         if (data.data && data.data.length > 0) {
             // Atualizar a capa pelo nome do artista
@@ -583,7 +595,7 @@ document.addEventListener('keydown', function (event) {
             slideVolume.value = decimalToInt(audio.volume);
             page.changeVolumeIndicator(decimalToInt(audio.volume));
             break;
-        // Spacebar (preventDefault evita rolar a página junto)
+        // Spacebar (preventDefault prevents page scrolling along)
         case ' ':
         case 'Spacebar':
             event.preventDefault();
@@ -627,8 +639,8 @@ function decimalToInt(vol) {
     return vol * 100;
 }
 
-// Botão de instalar como PWA: só aparece quando o navegador sinaliza que a
-// instalação está disponível (manifest + service worker já registrados).
+// Install as PWA button: only appears when the browser indicates that the
+// Installation is available (manifest + service worker already registered).
 let deferredInstallPrompt = null;
 
 window.addEventListener('beforeinstallprompt', function (event) {
