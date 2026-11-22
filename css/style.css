@@ -1,9 +1,9 @@
 @charset 'utf-8';
 
 /* =========================================================
-   Radio Player — conceito "now playing app"
-   Uma única linguagem visual: capa da música desfocada como
-   fundo, superfícies translúcidas consistentes, um acento
+   Radio Player â€” conceito "now playing app"
+   Uma Ãºnica linguagem visual: capa da mÃºsica desfocada como
+   fundo, superfÃ­cies translÃºcidas consistentes, um acento
    ciano e tipografia Poppins. Sem Bootstrap.
    ========================================================= */
 
@@ -38,7 +38,7 @@ body {
 .text-uppercase { text-transform: uppercase; }
 .text-capitalize { text-transform: capitalize; }
 
-/* ---- fundo: capa da música desfocada + gradiente ---- */
+/* ---- fundo: capa da mÃºsica desfocada + gradiente ---- */
 
 .bg {
     position: fixed;
@@ -180,7 +180,7 @@ body {
     gap: 18px;
 }
 
-/* botões utilitários circulares, mesma família visual do play */
+/* botÃµes utilitÃ¡rios circulares, mesma famÃ­lia visual do play */
 .ctrl-btn {
     width: 52px;
     height: 52px;
@@ -229,8 +229,8 @@ body {
 .play-btn .fa-play { margin-left: 5px; }
 
 /* estado do player (#buttonPlay): o script.js atualiza o texto
-   (PLAY/PAUSAR/...), mas ele fica só para leitores de tela — o ícone
-   do botão já comunica o estado visualmente */
+   (PLAY/PAUSAR/...), mas ele fica sÃ³ para leitores de tela â€” o Ã­cone
+   do botÃ£o jÃ¡ comunica o estado visualmente */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -243,7 +243,7 @@ body {
     border: 0;
 }
 
-/* ---- volume: botão circular + popover (escondido no celular: botões físicos) ---- */
+/* ---- volume: botÃ£o circular + popover (escondido no celular: botÃµes fÃ­sicos) ---- */
 
 .volume-wrap {
     display: none;
@@ -320,9 +320,9 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0 0 0 4px rgba(0, 225, 231, 0.2);
 }
 
-/* o botão da letra herda .ctrl-btn; o script.js controla opacity/data-toggle */
+/* o botÃ£o da letra herda .ctrl-btn; o script.js controla opacity/data-toggle */
 
-/* ---- próxima música da fila (AzuraCast, index_azura.html) ---- */
+/* ---- prÃ³xima mÃºsica da fila (AzuraCast, index_azura.html) ---- */
 
 .up-next {
     margin-top: 24px;
@@ -373,7 +373,7 @@ input[type=range]::-moz-range-thumb {
     text-overflow: ellipsis;
 }
 
-/* ---- histórico ---- */
+/* ---- histÃ³rico ---- */
 
 .historic {
     width: 100%;
@@ -390,8 +390,8 @@ input[type=range]::-moz-range-thumb {
     color: var(--text-muted);
 }
 
-/* minmax(0, 1fr) trava a coluna na largura do container — sem isso a track
-   "auto" cresce até o max-content de títulos longos (nowrap) e estoura a
+/* minmax(0, 1fr) trava a coluna na largura do container â€” sem isso a track
+   "auto" cresce atÃ© o max-content de tÃ­tulos longos (nowrap) e estoura a
    tela no celular em vez de deixar o ellipsis agir */
 .history-list {
     display: grid;
@@ -513,7 +513,7 @@ input[type=range]::-moz-range-thumb {
 
 body.modal-open { overflow: hidden; }
 
-/* ---- botão instalar PWA ---- */
+/* ---- botÃ£o instalar PWA ---- */
 
 .install-btn {
     position: fixed;
@@ -540,8 +540,8 @@ body.modal-open { overflow: hidden; }
 
 .install-btn:hover { background: rgba(255, 255, 255, 0.12); }
 
-/* celular: no topo o botão brigava com o nome da rádio (masthead centrado);
-   vira uma pílula fixa na base da tela, na zona do polegar */
+/* celular: no topo o botÃ£o brigava com o nome da rÃ¡dio (masthead centrado);
+   vira uma pÃ­lula fixa na base da tela, na zona do polegar */
 @media (max-width: 575px) {
     .install-btn {
         top: auto;
@@ -554,14 +554,14 @@ body.modal-open { overflow: hidden; }
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
 
-    /* reserva espaço no fim do conteúdo enquanto o botão existe,
-       para a pílula fixa não cobrir o último card do histórico */
+    /* reserva espaÃ§o no fim do conteÃºdo enquanto o botÃ£o existe,
+       para a pÃ­lula fixa nÃ£o cobrir o Ãºltimo card do histÃ³rico */
     body:has(.install-btn:not([hidden])) .app {
         padding-bottom: calc(96px + env(safe-area-inset-bottom));
     }
 }
 
-/* ---- desktop: capa à esquerda, informações à direita ---- */
+/* ---- desktop: capa Ã  esquerda, informaÃ§Ãµes Ã  direita ---- */
 
 @media (min-width: 900px) {
     .player {
