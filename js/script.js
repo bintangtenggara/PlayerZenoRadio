@@ -442,7 +442,7 @@ function handleDeezerResponse(data) {
 
     var hasResult = data && data.data && data.data.length > 0;
     // Search for the cover art by song title (artist.picture_big would search by artist)
-    var artworkUrl = hasResult ? data.data[0].album.cover_big : 'https://live.staticflickr.com/65535/53459011184_1df18fcc82_b.jpg';
+    var artworkUrl = hasResult ? data.data[0].album.cover_big : 'https://stream.bintangtenggarafm.com/img/cover.png';
 
     coverArt.style.backgroundImage = 'url(' + artworkUrl + ')';
     coverArt.className = 'animated bounceInLeft';
